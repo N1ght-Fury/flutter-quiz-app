@@ -2,7 +2,29 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State<MyApp> {
+  List<String> questions = [
+    'What\'s your favorite color?',
+    'How old are u?'
+  ];
+
+  int questionIndex = 0;
+  int answerIndex = 0;
+
+  void answerQuestion() {
+    setState(() {
+      questionIndex++;
+      answerIndex++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // 'What\'s your ...' ---> \ sing makes ' a character
@@ -14,18 +36,18 @@ class MyApp extends StatelessWidget {
         body: Center(
           child: Column(
             children: <Widget>[
-              Text('Question 1'),
+              Text(questions[questionIndex]),
               RaisedButton(
                 child: Text('Answer 1'),
-                onPressed: null,
+                onPressed: answerQuestion,
               ),
               RaisedButton(
                 child: Text('Answer 2'),
-                onPressed: null,
+                onPressed: answerQuestion,
               ),
               RaisedButton(
                 child: Text('Answer 3'),
-                onPressed: null,
+                onPressed: answerQuestion,
               ),
             ],
           ),
