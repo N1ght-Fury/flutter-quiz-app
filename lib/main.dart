@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,26 +13,50 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> questions = [
+  static const List<Map<String, dynamic>> _questions = [
     {
       'questionText': 'What\'s your favorite color?',
-      'answers': ['Black', 'Red', 'Green', 'White']
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 3},
+        {'text': 'White', 'score': 1}
+      ]
     },
     {
       'questionText': 'What\'s your favorite animal?',
-      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion']
+      'answers': [
+        {'text': 'Rabbit', 'score': 3},
+        {'text': 'Snake', 'score': 11},
+        {'text': 'Elephant', 'score': 5},
+        {'text': 'Lion', 'score': 9}
+      ]
     },
     {
       'questionText': 'Who\'s your favorite idol?',
-      'answers': ['Me', 'Me', 'Me', 'Me']
+      'answers': [
+        {'text': 'Me', 'score': 1},
+        {'text': 'Me', 'score': 1},
+        {'text': 'Me', 'score': 1},
+        {'text': 'Me', 'score': 1}
+      ]
     },
   ];
 
   int _questionIndex = 0;
+  int _totalScore = 0;
 
-  void _answerQuestion() {
+  void _answerQuestion(int score) {
     setState(() {
       _questionIndex++;
+      _totalScore += score;
+    });
+  }
+
+  void _restartApp() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
     });
   }
 
@@ -45,17 +69,13 @@ class _MyAppState extends State<MyApp> {
           title: Text('Hello World!'),
         ),
         body: Center(
-          child: Column(
-            children: <Widget>[
-              Question(questions[_questionIndex]['questionText']),
-              ...(questions[_questionIndex]['answers'] as List<String>)
-                  .map((answer) {
-                return Answer(answer, _answerQuestion);
-              }).toList(),
-              
-            ],
-          ),
-        ),
+            child: _questionIndex < _questions.length
+                ? Quiz(
+                    answerQuestion: _answerQuestion,
+                    questionIndex: _questionIndex,
+                    questions: _questions,
+                  )
+                : Result(_restartApp, _totalScore)),
       ),
     );
   }
